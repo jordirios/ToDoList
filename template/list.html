@@ -1,11 +1,22 @@
-<body style="background-color: rgb(186, 236, 105)">
-        <div class="label">
-                <h1> TODO App...</h1>
+<body style="background-color: rgb(255, 255, 0)">
 
-                <form action="/task" method="post">
+        <div class="label">
+                <center><h1> ToDo List </h1></center>
+
+                <center><form action="/task" method="post">
                     <p><input type="text" name="content"></p>
                     <input type="submit" value="Add task">
-                </form>
+                </form></center>
 
-            </div>
-    </body>
+                <center><ol>
+                    {%for task in tasks %}
+                        <li>
+                            {% if task.done %} <del> {% endif %}
+                            {{ task.content }} {% if task.done %} </del> {% endif %}
+                            <a href="/done/{{ task.id }}">Done</a>
+                            <a href="/delete/{{ task.id }}">Delete</a>
+                        </li>
+                    {% endfor %}
+                </ol></center>
+        </div>
+</body>
