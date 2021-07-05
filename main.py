@@ -7,7 +7,6 @@ app = Flask(__name__, template_folder='template')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-db.create_all()
 
 
 #Create the database to fill the columns with the information given by the user
@@ -15,6 +14,8 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(100))
     done = db.Column(db.Boolean)
+
+db.create_all()
 
 
 @app.route('/')
@@ -46,7 +47,12 @@ def delete_task(task_id):
 @app.route('/done/<int:task_id>')
 def update_task(task_id):
     task = Task.query.filter_by(id=task_id).first()
-    task.done = not task.done
+    if not task:
+        return redirect('/')
+    if task.done:
+        task.done = False
+    else:
+        task.done = True
     db.session.commit()
     return redirect('/')
 
